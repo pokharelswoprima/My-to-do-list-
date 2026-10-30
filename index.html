@@ -149,22 +149,6 @@ body{display:block;padding:0;gap:0}
 .sitefoot strong{font-family:'Bodoni Moda',Didot,Georgia,serif;font-weight:500;font-size:1.4rem;color:var(--title)}
 .big{font-size:clamp(3.4rem,15vw,5rem);margin-bottom:.6rem}
 h2{font-size:2.2rem}
-
-/* Account screen — uses the existing paper, pink, and theme colors */
-.auth-screen{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:1.2rem;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
-.auth-card{position:relative;width:min(100%,25rem);padding:2.3rem 1.8rem 2rem;background:var(--paper);border:1px dashed var(--rule);box-shadow:12px 14px 0 var(--pink);color:var(--ink)}
-.auth-card h2{font-family:'Bodoni Moda',Didot,Georgia,serif;font-size:2.3rem;font-weight:400;color:var(--title);margin:0 0 .35rem;text-align:center}
-.auth-card p{color:var(--muted);text-align:center;margin:.2rem 0 1.3rem}
-.auth-card label{display:block;color:var(--title);font-size:.95rem;margin:.8rem 0 .3rem}
-.auth-card input{width:100%;border:1px dashed var(--rule);border-radius:.6rem;background:transparent;color:var(--ink);font:inherit;padding:.75rem .85rem;outline-color:var(--accent)}
-.auth-actions{display:flex;gap:.6rem;margin-top:1.2rem}
-.auth-actions button{flex:1}
-.auth-switch{display:block;margin:1rem auto 0;border:0;background:transparent;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
-.auth-message{min-height:1.3rem;font-size:.9rem;color:var(--title);margin-top:.8rem;text-align:center}
-#accountControls{display:flex;align-items:center;gap:.6rem;margin-left:.2rem;white-space:nowrap}
-#accountEmail{max-width:10rem;overflow:hidden;text-overflow:ellipsis;color:var(--muted);font-size:.85rem}
-#logoutBtn{border:1px dashed var(--rule);background:transparent;color:var(--title);border-radius:2rem;padding:.35rem .7rem;font:inherit;font-size:.85rem;cursor:pointer}
-@media(max-width:38rem){.tn-in{gap:.6rem;padding:.65rem .8rem}.tn-brand{font-size:1.15rem}#accountEmail{display:none}#logoutBtn{padding:.3rem .55rem}}
 </style>
 </head>
 <body>
@@ -184,7 +168,7 @@ h2{font-size:2.2rem}
   <path d="M800 650C725 660 655 725 605 795C545 875 470 905 440 1000H800Z" fill="url(#scal)"/>
 </svg>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
-<header class="topnav"><div class="tn-in"><a class="tn-brand" href="#tasks">To Do List</a><nav aria-label="Sections"><a href="#tasks">Tasks</a><a href="#journal">Journal</a><a href="#habits">Habits</a><a href="#room">My Room</a><a href="#focus">Focus</a></nav><button class="theme" id="theme"></button><div id="accountControls" hidden><span id="accountEmail"></span><button id="logoutBtn" type="button">Log out</button></div></div></header>
+<header class="topnav"><div class="tn-in"><a class="tn-brand" href="#tasks">To Do List</a><nav aria-label="Sections"><a href="#tasks">Tasks</a><a href="#journal">Journal</a><a href="#habits">Habits</a><a href="#room">My Room</a><a href="#focus">Focus</a></nav><button class="theme" id="theme"></button></div></header>
 <section class="cover" id="top"><div><p class="date" id="date"></p><h1>to do list</h1><p class="lead">Plan your day, finish your tasks and decorate a little room of your own.</p><a class="go" href="#tasks">Start planning</a></div></section>
 <section class="steps" aria-label="How it works"><div><b>1</b><h3>Add tasks</h3><p>Write what needs doing, tag it and set a date.</p></div><div><b>2</b><h3>Earn coins</h3><p>Finish tasks, tick habits and focus to collect coins and XP.</p></div><div><b>3</b><h3>Decorate</h3><p>Spend coins on plants, lamps and furniture for your room.</p></div></section>
 <div class="board">
@@ -248,28 +232,11 @@ h2{font-size:2.2rem}
 </div>
 <footer class="sitefoot"><p>Designed and built by</p><p><strong>Swoprima Pokharel</strong></p><p>to do list &middot; journal &middot; habits &middot; my room &middot; focus</p></footer>
 <div class="toast" id="toast" role="status"></div>
-<div class="auth-screen" id="authScreen">
-  <div class="auth-card">
-    <h2 id="authTitle">Welcome back</h2>
-    <p id="authSubtitle">Sign in to open your own little space.</p>
-    <form id="authForm">
-      <label for="authEmail">Email</label>
-      <input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
-      <label for="authPassword">Password</label>
-      <input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters" minlength="6" required>
-      <div class="auth-actions"><button class="btn" id="authSubmit" type="submit">Log in</button></div>
-    </form>
-    <button class="auth-switch" id="authSwitch" type="button">New here? Create an account</button>
-    <div class="auth-message" id="authMessage" role="status"></div>
-  </div>
-</div>
-
 <script>
 (function(){
-  var ACCOUNT_ID=localStorage.getItem("cozy-account-id")||"guest";
-  var KEY="todo-list-v1-"+ACCOUNT_ID, tasks=[], filter="all";
+  var KEY="todo-list-v1", tasks=[], filter="all";
   try{ var s=localStorage.getItem(KEY); if(s) tasks=JSON.parse(s)||[]; }catch(e){ tasks=[]; }
-  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(tasks)); }catch(e){} if(window.saveCozyData) window.saveCozyData(); }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(tasks)); }catch(e){} }
   var list=document.getElementById("list"), input=document.getElementById("input");
   try{ document.getElementById("date").textContent=new Date().toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"}); }catch(e){}
   function render(){
@@ -327,10 +294,9 @@ h2{font-size:2.2rem}
   var qs=["Small steps still count.","One task at a time.","Start where you are.","Slow progress is still progress.","Done is better than perfect.","Future you will say thanks."];
   document.getElementById("quote").textContent=qs[Math.floor(Date.now()/864e5)%qs.length];
   function $(i){return document.getElementById(i);}
-  var COZY_KEY='cozy-v1-'+ACCOUNT_ID;
-  var G={};try{G=JSON.parse(localStorage.getItem(COZY_KEY))||{};}catch(e){}
+  var G={};try{G=JSON.parse(localStorage.getItem('cozy-v1'))||{};}catch(e){}
   G.coins=G.coins||0;G.xp=G.xp||0;G.items=G.items||[];G.habits=G.habits||[];G.j=G.j||{};G.hr=G.hr||{};G.fc=G.fc||{};
-  function gsave(){try{localStorage.setItem(COZY_KEY,JSON.stringify(G));}catch(e){} if(window.saveCozyData) window.saveCozyData();}
+  function gsave(){try{localStorage.setItem('cozy-v1',JSON.stringify(G));}catch(e){}}
   function ago(n){var d=new Date();d.setDate(d.getDate()-n);return d;}
   function day(d){d=d||new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
   var tt;function toast(m){var t=$('toast');t.textContent=m;t.className='toast on';clearTimeout(tt);tt=setTimeout(function(){t.className='toast';},2400);}
@@ -377,7 +343,7 @@ h2{font-size:2.2rem}
     {id:'piano',e:'🎹',n:'Keyboard',p:55,s:11},{id:'star',e:'⭐',n:'Star',p:5,s:6}
   ];
   var WALLS=['#bcc99b','#f3e3c3','#e3cfcf','#c8dbe6','#d9cfe8','#f1c9a8','#d8d8d4','#3a472c'];
-    var FLOORS=['#e3cfcf','#c9a77c','#a98467','#d8d8d4','#9fb1a0','#f5e9cf','#5b4636','#7a8a9a'];
+  var FLOORS=['#e3cfcf','#c9a77c','#a98467','#d8d8d4','#9fb1a0','#f5e9cf','#5b4636','#7a8a9a'];
   var scene=$('scene'),sel=null,rinit=0;
   function info(id){for(var i=0;i<IT.length;i++)if(IT[i].id===id)return IT[i];}
   function uid(){return Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36);}
@@ -469,94 +435,5 @@ h2{font-size:2.2rem}
   render();
 })();
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-(function(){
-  // Add your project's values from Supabase -> Project Settings -> API.
- var SUPABASE_URL = "https://ogofjdhysmsfepyswegj.supabase.co";
-var SUPABASE_ANON_KEY = "sb_publishable_wv7SM4CXNcgG9LEpKaq9Mw_3Tchp_oO";
-  var screen=document.getElementById('authScreen');
-  var form=document.getElementById('authForm');
-  var title=document.getElementById('authTitle');
-  var subtitle=document.getElementById('authSubtitle');
-  var submit=document.getElementById('authSubmit');
-  var sw=document.getElementById('authSwitch');
-  var msg=document.getElementById('authMessage');
-  var signup=false, client=null, syncing=false, syncTimer=null;
-  function message(t){msg.textContent=t;}
-  function mode(){
-    title.textContent=signup?'Create your account':'Welcome back';
-    subtitle.textContent=signup?'Your tasks and journal will have their own private space.':'Sign in to open your own little space.';
-    submit.textContent=signup?'Create account':'Log in';
-    sw.textContent=signup?'Already have an account? Log in':'New here? Create an account';
-    document.getElementById('authPassword').autocomplete=signup?'new-password':'current-password';
-    message('');
-  }
-  sw.addEventListener('click',function(){signup=!signup;mode();});
-  function showAccount(user){
-    document.getElementById('accountControls').hidden=false;
-    document.getElementById('accountEmail').textContent=user.email||'My account';
-  }
-  async function loadUser(user){
-    var oldId=localStorage.getItem('cozy-account-id');
-    if(oldId===user.id){screen.style.display='none';showAccount(user);return;}
-    message('Opening your account…');
-    var result=await client.from('user_data').select('data').eq('user_id',user.id).maybeSingle();
-    if(result.error){message('Database setup is not finished: '+result.error.message);return;}
-    var row=result.data;
-    localStorage.setItem('cozy-account-id',user.id);
-    if(row&&row.data){
-      localStorage.setItem('cozy-legacy-migrated','yes');
-      if(row.data.tasks!==undefined)localStorage.setItem('todo-list-v1-'+user.id,JSON.stringify(row.data.tasks));
-      if(row.data.cozy!==undefined)localStorage.setItem('cozy-v1-'+user.id,JSON.stringify(row.data.cozy));
-    }else if(!localStorage.getItem('cozy-legacy-migrated')){
-      var oldTasks=localStorage.getItem('todo-list-v1');
-      var oldCozy=localStorage.getItem('cozy-v1');
-      if(oldTasks)localStorage.setItem('todo-list-v1-'+user.id,oldTasks);
-      if(oldCozy)localStorage.setItem('cozy-v1-'+user.id,oldCozy);
-      localStorage.setItem('cozy-legacy-migrated','yes');
-      await saveNow();
-    }
-    location.reload();
-  }
-  async function saveNow(){
-    if(!client)return;
-    var id=localStorage.getItem('cozy-account-id');if(!id||id==='guest')return;
-    var tasks=[] , cozy={};
-    try{tasks=JSON.parse(localStorage.getItem('todo-list-v1-'+id)||'[]');}catch(e){}
-    try{cozy=JSON.parse(localStorage.getItem('cozy-v1-'+id)||'{}');}catch(e){}
-    var r=await client.from('user_data').upsert({user_id:id,data:{tasks:tasks,cozy:cozy},updated_at:new Date().toISOString()},{onConflict:'user_id'});
-    if(r.error)console.error('Cloud save failed:',r.error.message);
-  }
-  window.saveCozyData=function(){clearTimeout(syncTimer);syncTimer=setTimeout(saveNow,700);};
-  async function start(){
-    if(!window.supabase||SUPABASE_URL.indexOf('PASTE_')===0||SUPABASE_ANON_KEY.indexOf('PASTE_')===0){message('Connect your Supabase project in the code to enable accounts.');return;}
-    client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-    var res=await client.auth.getSession();
-    if(res.data.session){await loadUser(res.data.session.user);return;}
-    screen.style.display='grid';
-  }
-  form.addEventListener('submit',async function(e){
-    e.preventDefault();if(!client){message('Add your Supabase URL and anon key in the code first.');return;}
-    var email=document.getElementById('authEmail').value.trim();
-    var password=document.getElementById('authPassword').value;
-    submit.disabled=true;message(signup?'Creating your account…':'Logging in…');
-    var r=signup?await client.auth.signUp({email:email,password:password}):await client.auth.signInWithPassword({email:email,password:password});
-    submit.disabled=false;
-    if(r.error){message(r.error.message);return;}
-    if(r.data.session){await loadUser(r.data.user);}
-    else if(signup){message('Account created! Check your email to confirm it, then log in.');}
-    else{message('Please check your email and password.');}
-  });
-  document.getElementById('logoutBtn').addEventListener('click',async function(){
-    await saveNow();
-    if(client)await client.auth.signOut();
-    localStorage.removeItem('cozy-account-id');location.reload();
-  });
-  start().catch(function(e){message('Could not connect: '+e.message);});
-})();
-</script>
-
 </body>
 </html>
