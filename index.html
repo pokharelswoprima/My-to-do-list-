@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>to do list</title>
+<title>To Do List</title>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,700;1,400&family=Jost:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -91,15 +91,30 @@ textarea{display:block;width:100%;font:inherit;font-size:1.05rem;color:var(--ink
 .days{display:flex;justify-content:space-between}
 .day{width:2.2rem;height:2.2rem;border-radius:50%;border:2px solid var(--accent);background:transparent;color:var(--muted);font-weight:500}
 .day.on{background:var(--accent);color:var(--accent-ink)}
-.room{position:relative;container-type:inline-size;aspect-ratio:4/3;border-radius:1rem;overflow:hidden;background:var(--sage);margin-bottom:1.2rem}
-.floor{position:absolute;inset:auto 0 0 0;height:34%;background:var(--pink)}
+
+/* My room */
+.room{position:relative;container-type:inline-size;aspect-ratio:4/3;border-radius:1rem;overflow:hidden;background:var(--wallc,var(--sage));margin-bottom:1.2rem;touch-action:none;user-select:none;-webkit-user-select:none}
+.floor{position:absolute;inset:auto 0 0 0;height:34%;background:var(--floorc,var(--pink))}
 .win{position:absolute;left:38%;top:12%;width:24%;height:28%;background:var(--bg);border:4px solid var(--paper);border-radius:.4rem}
-.it{position:absolute;line-height:1}
+.it{position:absolute;line-height:1;cursor:grab;touch-action:none;transform:translate(-50%,-50%);white-space:nowrap;filter:drop-shadow(0 3px 3px rgba(0,0,0,.2))}
+.it:active{cursor:grabbing}
+.it.sel{outline:2px dashed var(--accent);outline-offset:4px;border-radius:.4rem}
+.it:focus-visible{outline:3px solid var(--accent);outline-offset:4px;border-radius:.4rem}
+.rtools{display:flex;flex-direction:column;gap:.8rem;margin-bottom:1.2rem}
+.rrow{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.rrow label{font-weight:500;color:var(--title);min-width:3.4rem}
+.sw{width:1.9rem;height:1.9rem;border-radius:50%;border:2px solid var(--rule);padding:0;cursor:pointer}
+.sw.on{border-color:var(--title);box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--title)}
+.rrow input[type=color]{width:2.2rem;height:2.2rem;padding:0;border:1px dashed var(--rule);border-radius:50%;background:transparent;cursor:pointer}
+.sw:focus-visible,.rrow input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+#selbar{margin-bottom:1.2rem}
+#selbar .btn{padding:.4rem 1rem;font-size:.9rem}
 .shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(7rem,1fr));gap:.6rem}
 .item{display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:.7rem .4rem;border:1px dashed var(--rule);border-radius:1rem;background:transparent;color:var(--ink)}
 .item span{font-size:1.8rem}
-.item small{color:var(--muted)}
+.item small{color:var(--muted);text-align:center}
 .item:disabled{opacity:.5;cursor:not-allowed}
+
 .timer{font-family:'Bodoni Moda',Didot,Georgia,serif;font-size:clamp(4rem,20vw,6rem);line-height:1;color:var(--title);text-align:center;margin:.6rem 0 1rem}
 .frow{display:flex;gap:.7rem;justify-content:center;margin:1.2rem 0 1rem}
 .toast{position:fixed;left:50%;bottom:calc(1.4rem + env(safe-area-inset-bottom,0px));transform:translate(-50%,2rem);opacity:0;background:var(--title);color:var(--paper);padding:.7rem 1.2rem;border-radius:2rem;font-size:.95rem;transition:.25s;z-index:5;pointer-events:none;max-width:90vw;text-align:center}
@@ -153,7 +168,7 @@ h2{font-size:2.2rem}
   <path d="M800 650C725 660 655 725 605 795C545 875 470 905 440 1000H800Z" fill="url(#scal)"/>
 </svg>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
-<header class="topnav"><div class="tn-in"><a class="tn-brand" href="#tasks">to do list</a><nav aria-label="Sections"><a href="#tasks">tasks</a><a href="#journal">journal</a><a href="#habits">habits</a><a href="#room">my room</a><a href="#focus">focus</a></nav><button class="theme" id="theme"></button></div></header>
+<header class="topnav"><div class="tn-in"><a class="tn-brand" href="#tasks">To Do List</a><nav aria-label="Sections"><a href="#tasks">Tasks</a><a href="#journal">Journal</a><a href="#habits">Habits</a><a href="#room">My Room</a><a href="#focus">Focus</a></nav><button class="theme" id="theme"></button></div></header>
 <section class="cover" id="top"><div><p class="date" id="date"></p><h1>to do list</h1><p class="lead">Plan your day, finish your tasks and decorate a little room of your own.</p><a class="go" href="#tasks">Start planning</a></div></section>
 <section class="steps" aria-label="How it works"><div><b>1</b><h3>Add tasks</h3><p>Write what needs doing, tag it and set a date.</p></div><div><b>2</b><h3>Earn coins</h3><p>Finish tasks, tick habits and focus to collect coins and XP.</p></div><div><b>3</b><h3>Decorate</h3><p>Spend coins on plants, lamps and furniture for your room.</p></div></section>
 <div class="board">
@@ -199,7 +214,12 @@ h2{font-size:2.2rem}
 </div></section>
 <section class="wrap alt" id="room"><div class="pink"></div><div class="paper"></div><div class="content sec">
 <h2>my little room</h2><p class="hint" id="rc"></p>
-<div class="room" id="scene" role="img" aria-label="Your decorated bedroom"><div class="win"></div><div class="floor"></div></div>
+<div class="rtools">
+  <div class="rrow"><label>Wall</label><span class="rrow" id="wsw"></span><input type="color" id="wcol" value="#bcc99b" aria-label="Custom wall color"></div>
+  <div class="rrow"><label>Floor</label><span class="rrow" id="fsw"></span><input type="color" id="fcol" value="#e3cfcf" aria-label="Custom floor color"></div>
+</div>
+<div class="room" id="scene" role="group" aria-label="Your decorated bedroom"><div class="win"></div><div class="floor"></div></div>
+<div class="rrow" id="selbar"></div>
 <div class="shop" id="shop"></div>
 </div></section>
 <section class="wrap" id="focus"><div class="pink"></div><div class="paper"></div><div class="content sec">
@@ -280,7 +300,7 @@ h2{font-size:2.2rem}
   function ago(n){var d=new Date();d.setDate(d.getDate()-n);return d;}
   function day(d){d=d||new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
   var tt;function toast(m){var t=$('toast');t.textContent=m;t.className='toast on';clearTimeout(tt);tt=setTimeout(function(){t.className='toast';},2400);}
-  function hud(){$('lv').textContent='Level '+(Math.floor(G.xp/100)+1);$('xpf').style.width=(G.xp%100)+'%';$('coins').textContent=G.coins+' coins';$('rc').textContent=G.coins+' coins to spend. Tap an item to buy it.';}
+  function hud(){$('lv').textContent='Level '+(Math.floor(G.xp/100)+1);$('xpf').style.width=(G.xp%100)+'%';$('coins').textContent=G.coins+' coins';$('rc').textContent=G.coins+' coins to spend. Buy as many items as you like, then drag them to arrange.';}
   function gain(c,x,why){var a=Math.floor(G.xp/100);G.coins+=c;G.xp+=x;gsave();toast('+'+c+' coins, +'+x+' xp. '+why+(Math.floor(G.xp/100)>a?' Level up!':''));hud();shop();}
   var MO=['😞','😕','😐','🙂','😄'],mood=-1,DL='SMTWTFS';
   var td=G.j[day()];if(td){mood=td.m;$('jtext').value=td.t||'';}
@@ -311,13 +331,101 @@ h2{font-size:2.2rem}
     });
   }
   $('hform').onsubmit=function(ev){ev.preventDefault();var v=$('hin').value.trim();if(!v)return;G.habits.push({n:v,d:{}});$('hin').value='';gsave();hb();};
-  var IT=[{id:'plant',e:'🪴',n:'Plant',p:20,x:80,y:8,s:13},{id:'cactus',e:'🌵',n:'Cactus',p:12,x:66,y:6,s:8},{id:'lamp',e:'💡',n:'Lamp',p:25,x:31,y:10,s:8},{id:'sofa',e:'🛋️',n:'Sofa',p:60,x:42,y:7,s:20},{id:'shelf',e:'📚',n:'Bookshelf',p:40,x:66,y:40,s:14},{id:'poster',e:'🖼️',n:'Poster',p:15,x:12,y:58,s:11},{id:'clock',e:'🕰️',n:'Clock',p:30,x:84,y:62,s:9},{id:'teddy',e:'🧸',n:'Teddy',p:35,x:16,y:26,s:8}];
-  function shop(){
-    var sc=$('scene');sc.querySelectorAll('.it').forEach(function(n){n.remove();});
-    [{e:'🛏️',x:5,y:12,s:24}].concat(IT.filter(function(i){return G.items.indexOf(i.id)>-1;})).forEach(function(i){var d=document.createElement('span');d.className='it';d.textContent=i.e;d.style.cssText='left:'+i.x+'%;bottom:'+i.y+'%;font-size:'+i.s+'cqw';sc.appendChild(d);});
-    var s=$('shop');s.innerHTML='';
-    IT.forEach(function(i){var own=G.items.indexOf(i.id)>-1,b=document.createElement('button');b.className='item';b.disabled=own||G.coins<i.p;b.innerHTML='<span>'+i.e+'</span><b>'+i.n+'</b><small>'+(own?'In your room':i.p+' coins')+'</small>';b.onclick=function(){if(G.coins>=i.p){G.coins-=i.p;G.items.push(i.id);gsave();toast(i.n+' added to your room');hud();shop();}};s.appendChild(b);});
+
+  /* ---------- My room ---------- */
+  var IT=[
+    {id:'bed',e:'🛏️',n:'Bed',p:50,s:24},{id:'sofa',e:'🛋️',n:'Sofa',p:60,s:20},{id:'chair',e:'🪑',n:'Chair',p:25,s:10},
+    {id:'desk',e:'🖥️',n:'Computer',p:45,s:11},{id:'tv',e:'📺',n:'TV',p:40,s:12},{id:'shelf',e:'📚',n:'Books',p:40,s:12},
+    {id:'plant',e:'🪴',n:'Plant',p:20,s:13},{id:'cactus',e:'🌵',n:'Cactus',p:12,s:8},{id:'flower',e:'🌻',n:'Sunflower',p:10,s:9},
+    {id:'lamp',e:'💡',n:'Lamp',p:25,s:8},{id:'candle',e:'🕯️',n:'Candle',p:8,s:6},{id:'poster',e:'🖼️',n:'Poster',p:15,s:11},
+    {id:'mirror',e:'🪞',n:'Mirror',p:30,s:12},{id:'clock',e:'🕰️',n:'Clock',p:30,s:9},{id:'teddy',e:'🧸',n:'Teddy',p:35,s:8},
+    {id:'cat',e:'🐱',n:'Cat',p:50,s:8},{id:'dog',e:'🐶',n:'Dog',p:50,s:8},{id:'guitar',e:'🎸',n:'Guitar',p:45,s:11},
+    {id:'piano',e:'🎹',n:'Keyboard',p:55,s:11},{id:'star',e:'⭐',n:'Star',p:5,s:6}
+  ];
+  var WALLS=['#bcc99b','#f3e3c3','#e3cfcf','#c8dbe6','#d9cfe8','#f1c9a8','#d8d8d4','#3a472c'];
+  var FLOORS=['#e3cfcf','#c9a77c','#a98467','#d8d8d4','#9fb1a0','#f5e9cf','#5b4636','#7a8a9a'];
+  var scene=$('scene'),sel=null,rinit=0;
+  function info(id){for(var i=0;i<IT.length;i++)if(IT[i].id===id)return IT[i];}
+  function uid(){return Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36);}
+  function find(u){for(var i=0;i<G.placed.length;i++)if(G.placed[i].u===u)return G.placed[i];}
+  function clamp(v){return Math.max(2,Math.min(98,v));}
+  function pos(d,p){d.style.left=p.x+'%';d.style.top=p.y+'%';d.style.fontSize=p.s+'cqw';}
+  G.room=G.room||{};
+  if(!G.placed){
+    var OLD={plant:[80,8],cactus:[66,6],lamp:[31,10],sofa:[42,7],shelf:[66,40],poster:[12,58],clock:[84,62],teddy:[16,26]};
+    G.placed=[{u:'bed',id:'bed',x:17,y:72,s:24}];
+    (G.items||[]).forEach(function(id){var it=info(id),o=OLD[id];if(it&&o)G.placed.push({u:uid(),id:id,x:o[0]+it.s/2,y:100-o[1]-it.s/1.5,s:it.s});});
+    gsave();
   }
+  function mark(){scene.querySelectorAll('.it').forEach(function(n){var on=n.dataset.u===sel;n.classList.toggle('sel',on);n.style.zIndex=on?999:n.dataset.z;});}
+  function pick(u){sel=u;mark();bar();}
+  function scn(){
+    scene.querySelectorAll('.it').forEach(function(n){n.remove();});
+    G.placed.forEach(function(p,i){
+      var it=info(p.id);if(!it)return;
+      var d=document.createElement('span');d.className='it';d.textContent=it.e;d.tabIndex=0;d.setAttribute('role','button');
+      d.setAttribute('aria-label',it.n+'. Drag or use arrow keys to move, Delete to remove');
+      d.dataset.u=p.u;d.dataset.z=i+1;pos(d,p);
+      d.onpointerdown=function(ev){
+        ev.preventDefault();pick(p.u);var r=scene.getBoundingClientRect();d.setPointerCapture(ev.pointerId);
+        d.onpointermove=function(e){p.x=clamp((e.clientX-r.left)/r.width*100);p.y=clamp((e.clientY-r.top)/r.height*100);pos(d,p);};
+        d.onpointerup=d.onpointercancel=function(){d.onpointermove=null;d.onpointerup=null;d.onpointercancel=null;gsave();};
+      };
+      d.onfocus=function(){if(sel!==p.u)pick(p.u);};
+      d.onkeydown=function(ev){
+        var st=ev.shiftKey?5:1,k=ev.key,m=true;
+        if(k==='ArrowLeft')p.x=clamp(p.x-st);else if(k==='ArrowRight')p.x=clamp(p.x+st);
+        else if(k==='ArrowUp')p.y=clamp(p.y-st);else if(k==='ArrowDown')p.y=clamp(p.y+st);
+        else if(k==='Delete'||k==='Backspace'){ev.preventDefault();drop(p);return;}else m=false;
+        if(m){ev.preventDefault();pos(d,p);gsave();}
+      };
+      scene.appendChild(d);
+    });
+    mark();
+  }
+  scene.onpointerdown=function(e){if(e.target===scene||e.target.classList.contains('floor')||e.target.classList.contains('win'))pick(null);};
+  function drop(p){
+    var it=info(p.id),back=Math.floor(it.p/2);
+    G.placed=G.placed.filter(function(x){return x!==p;});G.coins+=back;sel=null;gsave();
+    toast(it.n+' removed. +'+back+' coins back');hud();scn();bar();shop();
+  }
+  function bar(){
+    var b=$('selbar');b.innerHTML='';var p=sel&&find(sel);
+    if(!p){var h=document.createElement('small');h.style.color='var(--muted)';h.textContent='Tap an item in your room to select it. Drag to move it, or use the buttons to resize or remove it.';b.appendChild(h);return;}
+    var it=info(p.id),l=document.createElement('strong');l.textContent=it.e+' '+it.n;b.appendChild(l);
+    function add(t,fn){var x=document.createElement('button');x.className='btn ghost';x.type='button';x.textContent=t;x.onclick=fn;b.appendChild(x);}
+    function size(dv){return function(){p.s=Math.max(4,Math.min(40,p.s+dv));var d=scene.querySelector('[data-u="'+p.u+'"]');if(d)pos(d,p);gsave();};}
+    add('Smaller',size(-1.5));add('Bigger',size(1.5));
+    add('Remove (+'+Math.floor(it.p/2)+' coins)',function(){drop(p);});
+  }
+  function swatches(box,list,key){
+    box.innerHTML='';
+    list.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='sw'+(G.room[key]===c?' on':'');b.style.background=c;b.setAttribute('aria-label',key+' color '+c);b.onclick=function(){G.room[key]=c;gsave();paintRoom();};box.appendChild(b);});
+  }
+  function paintRoom(){
+    scene.style.setProperty('--wallc',G.room.wall||'');scene.style.setProperty('--floorc',G.room.floor||'');
+    swatches($('wsw'),WALLS,'wall');swatches($('fsw'),FLOORS,'floor');
+    if(G.room.wall)$('wcol').value=G.room.wall;if(G.room.floor)$('fcol').value=G.room.floor;
+  }
+  $('wcol').oninput=function(){G.room.wall=this.value;gsave();paintRoom();};
+  $('fcol').oninput=function(){G.room.floor=this.value;gsave();paintRoom();};
+  function shop(){
+    if(!rinit){rinit=1;paintRoom();scn();bar();}
+    var s=$('shop');s.innerHTML='';
+    IT.forEach(function(i){
+      var n=G.placed.filter(function(p){return p.id===i.id;}).length,b=document.createElement('button');
+      b.className='item';b.disabled=G.coins<i.p;
+      b.innerHTML='<span>'+i.e+'</span><b>'+i.n+'</b><small>'+i.p+' coins'+(n?' · '+n+' in room':'')+'</small>';
+      b.onclick=function(){
+        if(G.coins<i.p)return;G.coins-=i.p;
+        var p={u:uid(),id:i.id,x:30+Math.random()*40,y:45+Math.random()*30,s:i.s};
+        G.placed.push(p);sel=p.u;gsave();toast(i.n+' added. Drag it where you want.');hud();scn();bar();shop();
+      };
+      s.appendChild(b);
+    });
+  }
+
+  /* ---------- Focus timer ---------- */
   var FM={f:1500,b:300},fmode='f',left=FM.f,tid=null;
   function tm(){var m=Math.floor(left/60),s=left%60;$('tm').textContent=('0'+m).slice(-2)+':'+('0'+s).slice(-2);$('ff').style.width=(100-left/FM[fmode]*100)+'%';$('fmode').textContent=fmode==='f'?'Focus time. One thing only.':'Break time. Stretch and drink some water.';$('fstart').textContent=tid?'Pause':'Start';$('fcount').textContent=(G.fc[day()]||0)+' focus sessions today';}
   function tick(){left--;if(left<=0){if(fmode==='f'){G.fc[day()]=(G.fc[day()]||0)+1;gain(20,25,'Focus session done');fmode='b';}else fmode='f';left=FM[fmode];}tm();}
